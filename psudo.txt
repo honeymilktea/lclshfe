@@ -1,0 +1,39 @@
+system_stability = [read from table]   # describing the well-known drawing; 120 entry, 1 sec each
+# assume when system stability is low, cognitive zoom is high; affected by the previous 10 sec
+for i in range(0, 10)
+    cognitive zoom[i] = 100
+for i in range(10, 120)      # give 120 a variable
+    if avg(system_stability[i-1:i-10]) is greater or equal to 1
+        cognitive zoom[i] = 100/avg(system_stability[i-1:i-10])
+    else
+        cognitive zoom[i] = 100
+
+functional acuity = 0.02     # need to tune
+
+while jet is within the display range:  # can the camera view zoom in/out?
+    jet shift (delta) = |jet position - center of camera view|
+
+    if jet shift (delta) is grater than (functional acuity/cognitive zoom):  # need a shift value equivalent to zoom = 0
+        perception (noticing) delay = 100 ms + (a + blog2(1 + (|jet position - current eye fixation|)/jet shift)) ms  # using a and b to fit a curve to make it in ms
+        if operator is not actively monitoring: # passively, but not off task
+            perception (noticing) delay += 500 ms
+
+        decision time = 100 ms
+
+        # how to decide if the operator will respond?
+        # if active:
+
+        if operator decides to track and mouse is on a control button:
+            if next button to press is the current button:
+                action time = quick check (? ms) + 100 ms
+            else:
+                action time = quick check (? ms) + (c + dlog2(1 + button distance/button size)) ms + 100 ms
+
+        if operator decides to track and mouse is not on a control button:
+            action time = (a + blog2(1 + (|button position - current eye fixation|)/button size)) ms
+                        + (c + dlog2(1 + (|mouse position - current eye fixation|)/button size)) ms
+                        + 100 ms
+
+what if jet is not withing the display range?
+
+# blocks of an experiment; error rates; overall efficiency; rescheduling support

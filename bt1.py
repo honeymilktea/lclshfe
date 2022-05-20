@@ -5,6 +5,9 @@ from scipy.stats import sem
 import numpy
 import random
 import time
+import pandas as pd
+# import matplotlib.pyplot as plt
+from numpy import mean
 from datetime import datetime, date
 
 # random.seed(datetime.now())
@@ -37,7 +40,12 @@ class Operation:
     # Operator reponse delay combines noticing, attention shifting to button, decision delay,
     # moving to the button, and pressing it
     # (Possibly also need attention shift into the display, but we're leaving that out bcs it can be arbitrarily large)
-    noticing_delay = 1  # 100 ms
+    noticing_delay = 1  # 100 ms  # predictability?
+    # There are two situations: 1) The operator expects the stream shift (probably during the setup) and
+    # 2) The operator looks at another screen (desktop) and then notices the stream shift
+    # Visual warning: "In general, saccades begin -200 msec after target movement or appearance,
+    # decreasing by ~5 msec with advance warning of task onset"
+    # Saccades to remembered targets may be slower than to visible targets
     decision_delay = 1  # 100 ms -- FFF incorporate differential switch time
     # attention shifting to button has to be computed from where we are and where the buttons are
     # current_eye_position = 0
@@ -80,7 +88,9 @@ class Operation:
                                                 + self.button_press_delay + self.decision_delay + self.noticing_delay) + "]"
             return (self.button_distance * self.switch_button_delay_per_cm) + self.button_press_delay \
                    + self.decision_delay + self.noticing_delay
-
+    # make delay as functions
+    # somewhere in the functions or here, we need to embed functional acuity into decision choice (may decide not to track)
+    # decision choice delay instead of decision delay
 
 class Stream:
     # We have a stream (aka. jet) which shifts around in accord with these params.
@@ -112,6 +122,7 @@ class Stream:
         else:
             max_cycles = self.default_max_cycles
 
+        # Need to separate the physical model and the cognitive model
         while (self.cycle <= max_cycles) and (abs(self.stream_pos) < 1.0):  # Stop if it hits the wall on either side
             # Decide if the stream is going to shift:
             if random.random() < self.p_crazy_ivan:
